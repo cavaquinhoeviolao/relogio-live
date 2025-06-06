@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Relógio de Contagem Regressiva</title>
+  <style>
+    body {
+      background-color: black;
+      color: white;
+      font-family: 'Arial', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    #timer, #dica {
+      font-size: 100px;
+      text-align: center;
+      text-shadow: 2px 2px 5px black;
+    }
+
+    #timer {
+      color: white;
+      -webkit-text-stroke: 2px #90ee90; /* contorno verde claro */
+      text-shadow: 0 0 10px black;
+    }
+
+    #dica {
+      display: none;
+      color: #90ee90;
+      animation: brilho 1s infinite alternate;
+    }
+
+    @keyframes brilho {
+      0% { text-shadow: 0 0 5px #90ee90, 0 0 10px #90ee90; }
+      100% { text-shadow: 0 0 20px #90ee90, 0 0 40px #90ee90; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="timer">10:00</div>
+  <div id="dica">DICA!</div>
+
+  <script>
+    const timerEl = document.getElementById("timer");
+    const dicaEl = document.getElementById("dica");
+    const duracaoTotal = 10 * 60; // 10 minutos em segundos
+    const tempoDica = 10; // 10 segundos
+    let tempoRestante = duracaoTotal;
+
+    function formatarTempo(segundos) {
+      const min = Math.floor(segundos / 60);
+      const seg = segundos % 60;
+      return `${min.toString().padStart(2, '0')}:${seg.toString().padStart(2, '0')}`;
+    }
+
+    function mostrarDica() {
+      timerEl.style.display = "none";
+      dicaEl.style.display = "block";
+
+      setTimeout(() => {
+        dicaEl.style.display = "none";
+        tempoRestante = duracaoTotal;
+        timerEl.textContent = formatarTempo(tempoRestante);
+        timerEl.style.display = "block";
+      }, tempoDica * 1000);
+    }
+
+    function atualizarRelogio() {
+      if (tempoRestante > 0) {
+        tempoRestante--;
+        timerEl.textContent = formatarTempo(tempoRestante);
+      } else {
+        mostrarDica();
+      }
+    }
+
+    setInterval(() => {
+      // só atualiza o relógio se ele estiver visível
+      if (timerEl.style.display !== "none") {
+        atualizarRelogio();
+      }
+    }, 1000);
+  </script>
+
+</body>
+</html>
